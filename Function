@@ -1,0 +1,47 @@
+Function AccentMultiSyllabes(nbSyllabes As Integer, accentPrincipal As Integer, accentsSecondaires As String) As String
+    Dim i As Integer
+    Dim resultat As String
+    Dim accSec() As String
+    Dim accentTrouve As Boolean
+    
+    If nbSyllabes < 1 Or accentPrincipal < 1 Or accentPrincipal > nbSyllabes Then
+        AccentMultiSyllabes = "#Erreur"
+        Exit Function
+    End If
+    
+    accentsSecondaires = Trim(accentsSecondaires)
+    If accentsSecondaires <> "" Then
+        accSec = Split(accentsSecondaires, ",")
+    Else
+        ReDim accSec(0)
+        accSec(0) = ""
+    End If
+    
+    resultat = ""
+    For i = 1 To nbSyllabes
+        accentTrouve = False
+        
+        ' Accent principal
+        If i = accentPrincipal Then
+            resultat = resultat & "■"
+            accentTrouve = True
+        Else
+            ' Accent secondaire ?
+            Dim j As Integer
+            For j = LBound(accSec) To UBound(accSec)
+                If Trim(accSec(j)) = CStr(i) Then
+                    resultat = resultat & "▪"  ' Accent secondaire
+                    accentTrouve = True
+                    Exit For
+                End If
+            Next j
+        End If
+        
+        ' Pas d’accent
+        If accentTrouve = False Then
+            resultat = resultat & "□"
+        End If
+    Next i
+    
+    AccentMultiSyllabes = resultat
+End Function
